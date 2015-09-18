@@ -1,32 +1,50 @@
-potencia :: Float -> Integer -> Float
-potencia a b | b == 0    = 1
-             | otherwise = a * potencia a (b-1)
+pertenece :: Integer -> [Integer] -> Bool
+pertenece x xs  | length xs == 0	= False
+		| head xs == x		= True
+		| otherwise		= pertenece x (tail (xs))
 
-division :: Integer -> Integer -> (Integer, Integer)
-division a b | a - b < b  = (0,a) 
-             | otherwise  = (1+(fst last_div), (snd last_div))
-                    where last_div = division (a-b) b
+perteneceBis :: Integer -> [Integer] -> Bool
+perteneceBis x xs  | length xs == 0	= False
+	           | otherwise 		= (head xs == x)|| perteneceBis x (tail (xs))
+
+hayRepetidos :: [Integer] -> Bool
+hayRepetidos xs | length xs == 1	 	= False
+		| pertenece (head xs) (tail xs) = True
+		| otherwise		 	= hayRepetidos (tail xs) 
+
+menores :: Integer -> [Integer] -> [Integer]
+menores x xs	| length xs == 0  	= []
+		| head xs < x		= head xs : menores x (tail xs)
+		| head xs >= x		= menores x (tail xs)
+
+quitar :: Integer -> [Integer] -> [Integer]
+-- quita el primer elemento de una lista
+quitar x xs | length xs == 0  		= []
+	    | x == (head xs)		= tail xs 
+	    | x /= (head xs)		= head xs : (quitar x (tail xs))
+
+maximo :: [Integer] -> Integer
+maximo xs | length xs == 1		= head xs
+	  | length xs == 0		= error "Lista vacía campeón"
+	  | otherwise			= maxi (head xs) (maximo (tail xs))
 
 
-div_parcial :: Integer -> Integer -> [Integer]
-div_parcial n m | m == 1       = [1]
-                | mod n m /= 0 = div_parcial n (m-1)
-                | mod n m == 0 = m : div_parcial n (m-1) 
+maxi a b | a >= b = a
+	 | b > a  = b
 
-divs :: Integer -> [Integer]
-divs n = div_parcial n n
+capicuaPara :: [Integer] -> [Integer]
+capicuaPara xs | xs == (reverse xs)	= (reverse xs)
+	       | otherwise		= capicuaPara (xs (reverse xs)) 
 
-isItPrime n | length(divs n) == 2 = True
-            | otherwise          = False
+str2lst :: a -> [a]
+str2lst str    | length str == 1	= str
+	       | otherwise		= head str : str2lst (tail str)
 
-productoria :: [Integer] -> Integer
-productoria lst | length lst == 0   = 1
-                | otherwise         = head lst * productoria (tail lst)
 
-reverso :: [a] -> [a]
-reverso lst | length lst == 2       = tail lst ++ [head lst]
-            | otherwise             = reverso (tail lst) ++ [head lst]
 
-capicua :: [Integer] -> Bool
-capicua lst | lst == (reverso lst) = True
-            | otherwise            = False
+
+
+sumaInterna :: [Integer] -> [Integer] -> [Integer]
+sumaInterna xa xb | length xa /= length xb = error "length desigual"
+	          | length xa == 1         = [(head xa) + (head xb)]
+		  | otherwise		   = (head xa) + (head xb) : sumaInterna (tail xa) (tail xb)
