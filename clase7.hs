@@ -1,4 +1,4 @@
-mcd :: Integer -> Integer -> Integer
+mcd :: Integer -> Integer -> Integer 
 mcd a b | (min a b) == 0    = max a b
         | otherwise         = mcd (mod (max a b) (min a b)) (min a b)
 
